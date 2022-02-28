@@ -1,15 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { PlacesService } from '../../services';
 
 @Component({
   selector: 'app-search-bar',
   templateUrl: './search-bar.component.html',
-  styleUrls: ['./search-bar.component.css']
+  styleUrls: ['./search-bar.component.css'],
 })
-export class SearchBarComponent implements OnInit {
+export class SearchBarComponent {
+  private debounceTimer?: NodeJS.Timeout;
 
-  constructor() { }
+  constructor(private placesService: PlacesService) {}
 
-  ngOnInit(): void {
+  onQueryChange(query: string = '') {
+    if (this.debounceTimer) clearTimeout(this.debounceTimer);
+
+    this.debounceTimer = setTimeout(() => {
+      // console.log('Mandar este query: ', query);
+      this.placesService.getPlacesByQuery(query);
+    }, 1000);
   }
-
 }
